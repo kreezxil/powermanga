@@ -178,7 +178,7 @@ typedef unsigned int Uint32;
 #include <SDL2/SDL.h>
 #endif
 #include <SDL2/SDL_thread.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 #else
 #if defined(POWERMANGA_X11)
 #include <SDL/SDL.h>

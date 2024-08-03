@@ -4,33 +4,18 @@
 #
 ####################################################################
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.21)
 
 project(PowerManga C)
 
+set(CMAKE_C_STANDARD	17)
 SET(CMAKE_BUILD_TYPE Release)
 
-option(POWERMANGA_SDL 	"Using SDL library"		on)
-option(POWERMANGA_SDL2  "Using SDL2 library"	on)
-option(USE_SDLMIXER  	"Enable sound with SDL_Mixer library"	on)
 option(UNDER_DEVELOPMENT "Build development version" 	off)
-#option(POWERMANGA_X11 "Using XLib library" on Linux"		off)
 
 if(NOT EMSCRIPTEN)
-	if(POWERMANGA_SDL)
-    find_package(PNG REQUIRED)
-		if(POWERMANGA_SDL2)
-			find_package(SDL2 REQUIRED)
-			if(USE_SDLMIXER)
-				find_package(SDL2_mixer REQUIRED)
-			endif()
-		else()
-			find_package(SDL REQUIRED)
-			if(USE_SDLMIXER)
-				find_package(SDL_mixer REQUIRED)
-			endif()
-		endif()
-	endif()
+	find_package(SDL2 REQUIRED)
+	find_package(SDL2_mixer REQUIRED)
 endif()
 
 # assets path
@@ -94,131 +79,17 @@ endif()
 
 if(NOT EMSCRIPTEN)
 	include_directories(${INCLUDE_DIRECTORIES})
-	if(POWERMANGA_SDL)
-    include_directories(${PNG_INCLUDE_DIR})
-		if(POWERMANGA_SDL2)
-			include_directories(${SDL2_INCLUDE_DIRS})
-			if(USE_SDLMIXER)
-				include_directories(${SDL2_MIXER_INCLUDE_DIRS})
-			endif()
-		else()
-			include_directories(${SDL_INCLUDE_DIRS})
-			if(USE_SDLMIXER)
-				include_directories(${SDL_MIXER_INCLUDE_DIRS})
-			endif()
-		endif()
-	endif()
+	include_directories(${SDL2_INCLUDE_DIRS})
+	include_directories(${SDL2_MIXER_INCLUDE_DIRS})
 endif()
 
 # files
-add_executable(
-	powermanga
-	src/config.h
-	src/powermanga.c
-	src/bonus.c
-	src/bonus.h
-	src/counter_shareware.c
-	src/counter_shareware.h
-	src/congratulations.c
-	src/congratulations.h
-	src/config_file.c
-	src/config_file.h
-	src/curve_phase.c
-	src/curve_phase.h
-	src/display.c
-	src/display.h
-	src/display_sdl.c
-	src/display_sdl2.c
-	src/display_x11.c
-	src/electrical_shock.c
-	src/enemies.c
-	src/enemies.h
-	src/energy_gauge.c
-	src/energy_gauge.h
-	src/explosions.c
-	src/explosions.h
-	src/extra_gun.c
-	src/extra_gun.h
-	src/gfx_wrapper.c
-	src/gfx_wrapper.h
-	src/grid_phase.c
-	src/grid_phase.h
-	src/guardians.c
-	src/guardians.h
-	src/images.c
-	src/images.h
-	src/inits_game.c
-	src/lispreader.c
-	src/lispreader.h
-	src/lonely_foes.c
-	src/lonely_foes.h
-	src/main.c
-	src/menu.c
-	src/menu.h
-	src/menu_sections.c
-	src/menu_sections.h
-	src/meteors_phase.c
-	src/meteors_phase.h
-	src/movie.c
-	src/movie.h
-	src/log_recorder.c
-	src/log_recorder.h
-	src/options_panel.c
-	src/options_panel.h
-	src/powermanga.h
-	src/scalebit.c
-	src/scalebit.h
-	src/scale2x.c
-	src/scale2x.h
-	src/scale3x.c
-	src/scale3x.h
-	src/sdl_mixer.c
-	src/sdl_mixer.h
-	src/satellite_protections.c
-	src/satellite_protections.h
-	src/scrolltext.c
-	src/scrolltext.h
-	src/spaceship.c
-	src/spaceship.h
-	src/spaceship_weapons.c
-	src/spaceship_weapons.h
-	src/special_keys.c
-	src/sprites_string.c
-	src/sprites_string.h
-	src/shots.c
-	src/shots.h
-	src/shockwave.c
-	src/shockwave.h
-	src/script_page.c
-	src/script_page.h
-	src/starfield.c
-	src/starfield.h
-	src/text_overlay.c
-	src/text_overlay.h
-	src/texts.c
-	src/texts.h
-	src/tools.c
-	src/tools.h
-
-	src/gfxroutines.h
-	src/gfxroutines.c
-)
+file(GLOB_RECURSE GAME_SOURCES CONFIGURE_DEPENDS src/*.c src/*.h)
+add_executable(powermanga ${GAME_SOURCES})
 
 if(NOT EMSCRIPTEN)
-	if(POWERMANGA_SDL)
-    target_link_libraries(powermanga ${PNG_LIBRARY})
-		if(POWERMANGA_SDL2)
-			target_link_libraries(powermanga ${SDL2_LIBRARIES})
-			if(USE_SDLMIXER)
-				target_link_libraries(powermanga ${SDL2_MIXER_LIBRARIES})
-			endif()
-		else()
-			target_link_libraries(powermanga ${SDL_LIBRARIES})
-			if(USE_SDLMIXER)
-				target_link_libraries(powermanga ${SDL_MIXER_LIBRARIES})
-			endif()
-		endif()
-	endif()
+	target_link_libraries(powermanga SDL2::SDL2)
+	target_link_libraries(powermanga SDL2_mixer::SDL2_mixer)
 	if(UNIX)
 		target_link_libraries(powermanga -lm)
 	endif()
@@ -229,4 +100,8 @@ if(EMSCRIPTEN)
 endif()
 
 SET(RELEASE_NAME "powermanga")
-set_target_properties(powermanga PROPERTIES OUTPUT_NAME "${RELEASE_NAME}")
+set_target_properties(powermanga PROPERTIES
+	OUTPUT_NAME "${RELEASE_NAME}"
+	XCODE_GENERATE_SCHEME TRUE
+	XCODE_SCHEME_WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)

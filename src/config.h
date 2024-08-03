@@ -53,10 +53,10 @@
 #define PACKAGE_VERSION "0.94.0"
 
 /* Enable option to export sprites to PNG) */
-#define PNG_EXPORT_ENABLE 1
+/* #define PNG_EXPORT_ENABLE 1 */
 
 /* Define to enable SDL support */
-#define POWERMANGA_SDL 1
+#define POWERMANGA_SDL2 1
 
 /* Define to enable X11 support */
 /* #undef POWERMANGA_X11 */
