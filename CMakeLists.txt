@@ -14,18 +14,13 @@ SET(CMAKE_BUILD_TYPE Release)
 
 option(POWERMANGA_SDL 	"Using SDL library"		on)
 option(POWERMANGA_SDL2  "Using SDL2 library"	off)
-option(USE_SDLMIXER  	"Enable sound with SDL_Mixer library"	off)
+option(USE_SDLMIXER  	"Enable sound with SDL_Mixer library"	on)
 option(UNDER_DEVELOPMENT "Build development version" 	off)
 #option(POWERMANGA_X11 "Using XLib library" on Linux"		off)
 
-# configuration file
-configure_file (
-	"${PROJECT_SOURCE_DIR}/config.h.in"
-	"${PROJECT_SOURCE_DIR}/src/config.h"
-)
-
 if(NOT EMSCRIPTEN)
 	if(POWERMANGA_SDL)
+    find_package(PNG REQUIRED)
 		if(POWERMANGA_SDL2)
 			find_package(SDL2 REQUIRED)
 			if(USE_SDLMIXER)
@@ -98,6 +93,7 @@ endif()
 if(NOT EMSCRIPTEN)
 	include_directories(${INCLUDE_DIRECTORIES})
 	if(POWERMANGA_SDL)
+    include_directories(${PNG_INCLUDE_DIR})
 		if(POWERMANGA_SDL2)
 			include_directories(${SDL2_INCLUDE_DIRS})
 			if(USE_SDLMIXER)
@@ -208,6 +204,7 @@ add_executable(
 
 if(NOT EMSCRIPTEN)
 	if(POWERMANGA_SDL)
+    target_link_libraries(powermanga ${PNG_LIBRARY})
 		if(POWERMANGA_SDL2)
 			target_link_libraries(powermanga ${SDL2_LIBRARIES})
 			if(USE_SDLMIXER)
