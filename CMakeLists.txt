@@ -11,7 +11,7 @@ project(PowerManga C)
 SET(CMAKE_BUILD_TYPE Release)
 
 option(POWERMANGA_SDL 	"Using SDL library"		on)
-option(POWERMANGA_SDL2  "Using SDL2 library"	off)
+option(POWERMANGA_SDL2  "Using SDL2 library"	on)
 option(USE_SDLMIXER  	"Enable sound with SDL_Mixer library"	on)
 option(UNDER_DEVELOPMENT "Build development version" 	off)
 #option(POWERMANGA_X11 "Using XLib library" on Linux"		off)
@@ -80,8 +80,12 @@ endif()
 # unix gcc options
 if(UNIX AND NOT APPLE)
 
-SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -pipe -Wall")
-SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -ffast-math")
+SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -pipe -Wall -Wextra -Wpedantic -Wshadow -Werror=return-type -Wstrict-aliasing=2")
+SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -g0 -Ofast -ffast-math")
+
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -pipe O0 -ggdb3 -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -g")
 
 endif()
 
