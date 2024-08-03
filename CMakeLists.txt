@@ -8,8 +8,6 @@ cmake_minimum_required(VERSION 3.1)
 
 project(PowerManga C)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
-
 SET(CMAKE_BUILD_TYPE Release)
 
 option(POWERMANGA_SDL 	"Using SDL library"		on)
