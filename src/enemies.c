@@ -1561,6 +1561,7 @@ enemy_lonely (enemy * foe)
           spr->anim_count = 0;
           /* flip to the next image */
           spr->current_image++;
+
           /* check if last image has been reached */
           if (spr->current_image >= spr->numof_images)
             {

@@ -614,10 +614,12 @@ spaceship_upgrading (void)
     {
       ship->spr.img[i] = (image *) & spaceships_sprites[ship->type][i];
     }
+  //You should keep them! --kreezxil
+  //October 15, 2024
   /* remove protection satellites */
-  satellites_init ();
+  //satellites_init ();
   /* remove extra guns */
-  guns_init ();
+  //guns_init ();
   if (ship->spr.energy_level < ship->spr.pow_of_dest)
     {
       /* maximum energy level: start anim of closing option box */

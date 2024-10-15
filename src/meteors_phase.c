@@ -413,6 +413,13 @@ static bool
 next_level_without_guardian (void)
 {
   bool is_finished;
+  /*
+    spaceship_disappears = TRUE;
+    Oct 15, 2024
+    I think this is what causes the ship to move to the top of the screen when the 3rd phase ends which I found quite annoying as there are usually gems you can't collect on the screen
+    -- Kreezxil
+    Yes it is! but sadly this is not where you prevent that! because then ship stays stuck at congratulations for level 1 screen.
+  */
   spaceship_disappears = TRUE;
   is_finished = text_level_move (num_level);
   if (starfield_speed == 0.0 && is_finished)
